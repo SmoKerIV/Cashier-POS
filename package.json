@@ -1,0 +1,29 @@
+{
+  "name": "pos-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@nextui-org/react": "^2.2.9",
+    "@prisma/client": "^5.7.1",
+    "and": "^0.0.3",
+    "antd": "^5.12.5",
+    "framer-motion": "^10.16.16",
+    "html2pdf.js": "^0.10.1",
+    "next": "14.0.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "router": "^1.3.8"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "prisma": "^5.7.1",
+    "tailwindcss": "^3.3.0"
+  }
+}
