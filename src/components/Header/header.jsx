@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AppContainer from "../Container/container";
+import AppContainer from "../Contaner/container";
 import styles from "./header.module.css";
 
 const Header = () => {
@@ -7,22 +7,19 @@ const Header = () => {
     <div className={styles.header}>
       <AppContainer width={1300}>
         <div className={styles.content}>
-          <h1>Logo</h1>
+          <h2 className={styles.logo}>LOGO</h2>
           <ul>
             <li>
-              <Link href={"http://localhost:3000/"}>Home</Link>
+              <Link href="/">Home</Link>
             </li>
-
             <li>
-              <Link href={"/products"}>Products</Link>
+              <Link href="/products">Products</Link>
             </li>
-
             <li>
-              <Link href={"/category"}>Categories</Link>
+              <Link href="/categories">Categories</Link>
             </li>
-
             <li>
-              <Link href={"/invoices"}>Invoices</Link>
+              <Link href="/invoice">invoice</Link>
             </li>
           </ul>
         </div>

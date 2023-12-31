@@ -1,83 +1,85 @@
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
+
+function setCorsHeaders(response) {
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  return response;
+}
 
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
   const cat = searchParams.get("cat");
+  const query = searchParams.get("query");
 
-  let products = await prisma.product.findMany(
-    cat
-      ? {
-        where: {
-          categoryId: parseInt(cat),
-        },
-      }
-      : {}
-  );
+  let whereClause = {};
 
-  return Response.json(products);
+  if (query) {
+    whereClause = {
+      name: {
+        contains: query,
+      },
+    };
+  }
+
+  try {
+    const products = await prisma.product.findMany({
+      where: cat
+        ? {
+            categoryId: parseInt(cat),
+            ...whereClause,
+          }
+        : whereClause,
+      orderBy: {
+        id: "asc",
+      },
+    });
+
+    const response = new Response(JSON.stringify(products));
+    return setCorsHeaders(response);
+  } catch (error) {
+    const response = new Response(
+      JSON.stringify({
+        success: false,
+        error: error.message,
+      })
+    );
+    return setCorsHeaders(response);
+  }
 }
 
 export async function POST(req) {
   const body = await req.json();
-  try {
-    let product = await prisma.product.create({
-      data: body,
-    });
-    return Response.json({
-      success: true,
-      product,
-    });
-  } catch (error) {
-    return Response.json({
-      success: false,
-      error,
-    });
-  }
-}
-
-export async function PUT(req) {
-  const { id } = req.body;
-  const body = await req.json();
 
   try {
-    const updatedProduct = await prisma.product.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: body,
-    });
-    return Response.json({
-      success: true,
-      product: updatedProduct,
-    });
-
-  } catch (error) {
-    return Response.json({
-      success: false,
-      error,
-    });
-  }
-};
-
-export async function DELETE(req) {
-  const { id } = req.params;
-
-  try {
-    const deletedProduct = await prisma.product.delete({
-      where: {
-        id: parseInt(id),
+    const product = await prisma.product.create({
+      data: {
+        name: body.name,
+        image: body.image,
+        price: body.price,
+        categoryId: body.categoryId,
       },
     });
 
-    return Response.json({
-      success: true,
-      product: deletedProduct,
-    });
+    const response = new Response(
+      JSON.stringify({
+        success: true,
+        product,
+      })
+    );
+    return setCorsHeaders(response);
   } catch (error) {
-    return Response.json({
-      success: false,
-      error,
-    });
+    const response = new Response(
+      JSON.stringify({
+        success: false,
+        error: error.message,
+      })
+    );
+    return setCorsHeaders(response);
   }
 }

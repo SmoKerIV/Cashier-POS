@@ -1,14 +1,10 @@
 "use client";
-import Header from "@/components/Header/header";
 import { Image, Card, CardBody, CardFooter, Button } from "@nextui-org/react";
 import styles from "./page.module.css";
-import AppContainer from "@/components/Container/container";
+import AppContainer from "@/components/Contaner/container";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
-function Home() {
-  const router = useRouter();
+export default function Home() {
   const [cart, setCart] = useState([]);
   const [list, setList] = useState([]);
   const [cats, setCats] = useState([]);
@@ -75,7 +71,7 @@ function Home() {
   const handleConfirm = async () => {
     var raw = JSON.stringify({
       items: { cart },
-      number: 1,
+      number: 1
     });
 
     try {
@@ -88,10 +84,6 @@ function Home() {
       });
       let jsonData = await res.json();
       console.log(jsonData);
-      router.push({
-        pathname: "/invoices",
-        query: { cartData: JSON.stringify(cart) },
-      });
     } catch (error) {}
   };
 
@@ -157,9 +149,7 @@ function Home() {
               <h1>{Number(getTotal()).toLocaleString("en")}</h1>
             </div>
             <div className={styles.action}>
-              <Link href="/invoices">
-                <Button onClick={handleConfirm}>Confirm</Button>
-              </Link>
+              <Button onClick={handleConfirm}>Confirm</Button>
             </div>
           </div>
         </div>
@@ -167,4 +157,3 @@ function Home() {
     </main>
   );
 }
-export default Home;

@@ -1,9 +1,47 @@
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
 
+// Function to handle CORS headers
+function setCorsHeaders(response) {
+  response.headers.set("Access-Control-Allow-Origin", "*"); // Update with your specific allowed origins
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  return response;
+}
+
 export async function GET(req) {
-  let categories = await prisma.category.findMany();
-  return Response.json(categories);
+  const searchParams = req.nextUrl.searchParams;
+  const cat = searchParams.get("cat");
+  const query = searchParams.get("query");
+
+  let whereClause = {};
+
+  if (query) {
+    whereClause = {
+      name: {
+        contains: query,
+      },
+    };
+  }
+
+  let products = await prisma.category.findMany({
+    where: cat
+      ? {
+          categoryId: parseInt(cat),
+          ...whereClause,
+        }
+      : whereClause,
+    orderBy: {
+      id: "asc",
+    },
+  });
+
+  const response = new Response(JSON.stringify(products));
+  return setCorsHeaders(response);
 }
 
 export async function POST(req) {
@@ -12,58 +50,21 @@ export async function POST(req) {
     let category = await prisma.category.create({
       data: body,
     });
-    return Response.json({
-      success: true,
-      category,
-    });
+
+    const response = new Response(
+      JSON.stringify({
+        success: true,
+        category,
+      })
+    );
+    return setCorsHeaders(response);
   } catch (error) {
-    return Response.json({
-      success: false,
-      error,
-    });
-  }
-};
-
-export async function PUT(req) {
-  const { id } = req.params;
-  const body = await req.json();
-
-  try {
-    const updatedcategory = await prisma.category.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: body,
-    });
-    return Response.json({
-      success: true,
-      category: updatedcategory,
-    });
-
-  } catch (error) {
-    return Response.json({
-      success: false,
-      error,
-    });
-  }
-};
-export async function DELETE(req) {
-  const { id } = req.params;
-
-  try {
-    const deletedcategory = await prisma.category.delete({
-      where: {
-        id: parseInt(id),
-      },
-    });
-    return Response.json({
-      success: true,
-      category: deletedcategory,
-    });
-  } catch (error) {
-    return Response.json({
-      success: false,
-      error,
-    });
+    const response = new Response(
+      JSON.stringify({
+        success: false,
+        error,
+      })
+    );
+    return setCorsHeaders(response);
   }
 }
