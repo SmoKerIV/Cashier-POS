@@ -56,7 +56,7 @@ const Page = () => {
 
   const handleDeleteClick = async (id) => {
     try {
-      let url = `http://localhost:3000/api/products/${id}`;
+      let url = `https://bakers-pos.vercel.app/api/products/${id}`;
       await fetch(url, {
         method: "DELETE",
       });
@@ -69,7 +69,7 @@ const Page = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      let url = `http://localhost:3000/api/products?query=${search}`;
+      let url = `https://bakers-pos.vercel.app/api/products?query=${search}`;
       let res = await fetch(url);
       let jsonData = await res.json();
       setList(jsonData);
@@ -86,7 +86,7 @@ const Page = () => {
 
   const handleEditClick = async () => {
     try {
-      let url = `http://localhost:3000/api/products/${selectedProductId}`;
+      let url = `https://bakers-pos.vercel.app/api/products/${selectedProductId}`;
       await fetch(url, {
         method: "PUT",
         headers: {
@@ -103,7 +103,7 @@ const Page = () => {
 
   const handleAddClick = async () => {
     try {
-      let url = `http://localhost:3000/api/products`;
+      let url = `https://bakers-pos.vercel.app/api/products`;
       await fetch(url, {
         method: "POST",
         headers: {

@@ -49,7 +49,7 @@ const Page = () => {
   };
   const handleDeleteClick = async (id) => {
     try {
-      let url = `http://localhost:3000/api/categories/${id}`;
+      let url = `https://bakers-pos.vercel.app/api/categories/${id}`;
       const response = await fetch(url, {
         method: "DELETE",
       });
@@ -85,7 +85,7 @@ const Page = () => {
       try {
         setLoading(true); 
 
-        let url = `http://localhost:3000/api/categories?query=${search}`;
+        let url = `https://bakers-pos.vercel.app/api/categories?query=${search}`;
         let res = await fetch(url);
         let jsonData = await res.json();
         setList(jsonData);
@@ -100,7 +100,7 @@ const Page = () => {
   }, [search, refresh]);
   const handleEditClick = () => {
     try {
-      let url = `http://localhost:3000/api/categories/${selectedProductId}`;
+      let url = `https://bakers-pos.vercel.app/api/categories/${selectedProductId}`;
       fetch(url, {
         method: "PUT",
         headers: {
@@ -176,7 +176,7 @@ const Page = () => {
   ];
   const handleAddClick = () => {
     try {
-      let url = `http://localhost:3000/api/categories`;
+      let url = `https://bakers-pos.vercel.app/api/categories`;
       fetch(url, {
         method: "POST",
         headers: {

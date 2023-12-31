@@ -15,7 +15,7 @@ const Page = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:3000/api/invoice");
+        const response = await fetch("https://bakers-pos.vercel.app/api/invoice");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
